@@ -8,6 +8,9 @@ const cors = require("cors");
 const user = require("./models/User");
 const authRoutes = require("./routes/auth");
 const privateRoutes = require("./routes/private");
+const actualizarRoute = require("./routes/Actualizar")
+const deleteRoute = require("./routes/Delete")
+const selectRoute = require("./routes/select")
 const bcrypt = require("bcryptjs");
 
 
@@ -22,6 +25,9 @@ app.use(cors());
 app.use(express.json()); // Para leer JSON en requests
 app.use("/auth", authRoutes);
 app.use("/private", privateRoutes);
+app.use("/Actualizar",actualizarRoute);
+app.use("/Delete",deleteRoute);
+app.use("/select",selectRoute);
 
 
 // Configurar HTTPS con el certificado SSL
@@ -37,12 +43,6 @@ mongoose.connect("mongodb://localhost:27017/secure-api", {
 }).then(async () => {console.log("✅ Conectado a MongoDB")})
 .catch((err) => console.error("❌ Error de conexión:", err));
 
-
-// Crear un nuevo usuario
-const nuevoUsuario = new user({
-    username: "JuanPérez",
-    password: bcrypt.hash("12345", 10)
-});
 
 // Ruta básica
 app.get("/", (req, res) => {
