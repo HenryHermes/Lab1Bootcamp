@@ -6,6 +6,8 @@ import cors from "cors";
 import { authRouter } from "./routes/auth";
 import { userRouter } from "./routes/users";
 import "reflect-metadata"; // Necesario para decoradores
+import mongoose from "mongoose";
+import { productRouter } from "./routes/poducts";
 
 const app = express();
 
@@ -17,6 +19,11 @@ app.use(express.json());
 // Rutas
 app.use("/auth", authRouter);
 app.use("/users", userRouter);
+app.use("/products", productRouter);
+
+//conectarse con DB
+mongoose.connect("mongodb://localhost:27017/secure-api").then(async () => {console.log("✅ Conectado a MongoDB")})
+.catch((err) => console.error("❌ Error de conexión:", err));
 
 // Configurar HTTPS
 const options = {
@@ -24,6 +31,8 @@ const options = {
     cert: fs.readFileSync("server.crt"),
 };
 
-https.createServer(options, app).listen(443, () => {
-    console.log("🔒 Servidor HTTPS corriendo en https://localhost");
+const PORT = 3000;
+app.listen(PORT, () => {
+    console.log(`🔒 Servidor HTTPS corriendo en el puerto:${PORT}`);
+    
 });
